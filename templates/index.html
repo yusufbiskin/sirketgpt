@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Şirket Ana Sözleşmesi Oluştur</title>
+</head>
+<body>
+    <h1>Şirket Ana Sözleşmesi Oluştur</h1>
+    <form action="/olustur" method="post">
+        <label>Şirket Unvanı:</label>
+        <input type="text" name="unvan" required><br>
+        <label>Merkez İli:</label>
+        <input type="text" name="merkez_il" required><br>
+        <label>Merkez İlçesi:</label>
+        <input type="text" name="merkez_ilce" required><br>
+        <label>Açık Adres:</label>
+        <textarea name="adres" required></textarea><br>
+        <label>Faaliyet Alanı:</label>
+        <input type="text" name="faaliyet" required><br>
+        <label>Ortak Sayısı:</label>
+        <input type="number" name="ortak_sayisi" value="1" min="1" max="5"><br><br>
+        <label>Ortak 1 Ad Soyad:</label>
+        <input type="text" name="ortak_ad_0" required><br>
+        <label>Sermaye (TL):</label>
+        <input type="number" name="ortak_sermaye_0" required><br>
+        <label>Pay Adedi:</label>
+        <input type="number" name="ortak_pay_0" required><br>
+        <label>T.C. Kimlik No:</label>
+        <input type="text" name="ortak_tc_0" maxlength="11" required><br>
+        <label>Uyruk:</label>
+        <input type="text" name="ortak_uyruk_0" required><br>
+        <label>Müdür olarak atanacak mı?</label>
+        <input type="checkbox" name="ortak_mudur_0"><br>
+        <label>İmza Yetkisi:</label>
+        <select name="ortak_imza_0">
+            <option value="münferiden">Münferiden</option>
+            <option value="müştereken">Müştereken</option>
+        </select><br><br>
+        <button type="submit">📄 Belgeyi Oluştur</button>
+    </form>
+</body>
+</html>
