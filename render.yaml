@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: sirketgpt
+    env: python
+    buildCommand: ""
+    startCommand: python flask_sirket_app.py
