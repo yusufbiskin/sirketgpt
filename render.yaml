@@ -1,8 +1,0 @@
-
-services:
-  - type: web
-    name: sirketgpt
-    env: python
-    buildCommand: ""
-    startCommand: "gunicorn flask_sirket_app:app"
-    plan: free
