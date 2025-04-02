@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Şirket Ana Sözleşmesi - MERSİS</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-image: url('https://images.unsplash.com/photo-1557682250-33bd709cbe85');
+      background-size: cover;
+      background-attachment: fixed;
+    }
+    .card:hover:not(.disabled) { transform: scale(1.03); transition: 0.3s; cursor: pointer; }
+    .disabled { pointer-events: none; opacity: 0.5; }
+    .step { display: none; }
+    .step.active { display: block; }
+  </style>
+</head>
+<body class="bg-light">
+
+<!-- Step 1: Ana Sayfa -->
+<div class="container py-5 step active" id="step1">
+  <h3 class="text-center mb-4">MERSİS İşlem Seçimi</h3>
+  <div class="row g-4">
+    <div class="col-md-4">
+      <div class="card text-white bg-primary" onclick="nextStep('step2')">
+        <div class="card-body">
+          <h5 class="card-title">Kuruluş Başvurusu</h5>
+          <p class="card-text">Kuruluş işlemleri bu menüden yapılabilir.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card bg-secondary text-white disabled"><div class="card-body"><h5 class="card-title">Değişiklik Başvurusu</h5><p class="card-text">Pasif</p></div></div>
+    </div>
+    <div class="col-md-4">
+      <div class="card bg-warning text-white disabled"><div class="card-body"><h5 class="card-title">Yapı Değişikliği Başvurusu</h5><p class="card-text">Pasif</p></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Step 2: Kuruluş Türü Seçimi -->
+<div class="container py-5 step" id="step2">
+  <button class="btn btn-outline-dark mb-3" onclick="nextStep('step1')">← Geri</button>
+  <h3 class="text-center mb-4">Kuruluş Türü Seçimi</h3>
+  <div class="row g-3">
+    <div class="col-md-4">
+      <div class="card text-white bg-success" onclick="nextStep('step3')">
+        <div class="card-body">
+          <h5 class="card-title">Limited Şirket</h5>
+          <p class="card-text">Gerçek veya tüzel kişilerle, tek veya birden fazla ortakla kurulabilir.</p>
+          <p class="card-text text-end">Başlat ➜</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4"><div class="card bg-secondary text-white disabled"><div class="card-body"><h5 class="card-title">Anonim Şirket</h5></div></div></div>
+    <div class="col-md-4"><div class="card bg-secondary text-white disabled"><div class="card-body"><h5 class="card-title">Ticari İşletme</h5></div></div></div>
+    <div class="col-md-4"><div class="card bg-secondary text-white disabled"><div class="card-body"><h5 class="card-title">Şube</h5></div></div></div>
+    <div class="col-md-4"><div class="card bg-secondary text-white disabled"><div class="card-body"><h5 class="card-title">Kollektif Şirket</h5></div></div></div>
+    <div class="col-md-4"><div class="card bg-secondary text-white disabled"><div class="card-body"><h5 class="card-title">Komandit Şirket</h5></div></div></div>
+    <div class="col-md-4"><div class="card bg-secondary text-white disabled"><div class="card-body"><h5 class="card-title">Donatma İştirakı</h5></div></div></div>
+    <div class="col-md-4"><div class="card bg-secondary text-white disabled"><div class="card-body"><h5 class="card-title">Kooperatif</h5></div></div></div>
+  </div>
+</div>
+
+<!-- Step 3: Form Ekranı -->
+<div class="container py-5 step" id="step3">
+  <button class="btn btn-outline-dark mb-3" onclick="nextStep('step2')">← Geri</button>
+  <h3 class="text-center mb-4">Limited Şirket Başvuru Formu</h3>
+  <form action="/olustur" method="post">
+    <div class="mb-3"><label>Şirket Unvanı:</label><input type="text" name="unvan" class="form-control" required></div>
+    <div class="row">
+      <div class="col-md-6 mb-3"><label>Merkez İl:</label><input type="text" name="merkez_il" class="form-control" required></div>
+      <div class="col-md-6 mb-3"><label>Merkez İlçe:</label><input type="text" name="merkez_ilce" class="form-control" required></div>
+    </div>
+    <div class="mb-3"><label>Adres:</label><textarea name="adres" class="form-control" required></textarea></div>
+    <div class="mb-3"><label>Faaliyet Alanı:</label><input type="text" name="faaliyet" class="form-control" required></div>
+    <div class="mb-3"><label>Ortak Sayısı:</label><input type="number" name="ortak_sayisi" id="ortak_sayisi" class="form-control" min="1" max="5" onchange="ortakAlanlariOlustur()" required></div>
+    <div id="ortaklar_container"></div>
+    <button class="btn btn-primary mt-3">Belgeyi Oluştur</button>
+  </form>
+</div>
+
+<script>
+function nextStep(id) {
+  document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function ortakAlanlariOlustur() {
+  const sayi = parseInt(document.getElementById("ortak_sayisi").value);
+  const container = document.getElementById("ortaklar_container");
+  container.innerHTML = "";
+  for (let i = 0; i < sayi; i++) {
+    container.innerHTML += `
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5>Ortak ${i + 1}</h5>
+          <label id="etiket_adsoyad_${i}">Ad Soyad</label>
+          <input type="text" name="ortak_ad_${i}" placeholder="Ad Soyad" class="form-control mb-2" required>
+          <label>Kişi Türü:</label>
+          <select class="form-select mb-2" name="ortak_kisi_tipi_${i}" onchange="toggleKimlikVeEtiket(${i}, this.value)">
+            <option value="gercek">Gerçek Kişi</option>
+            <option value="tuzel">Tüzel Kişi</option>
+          </select>
+          <input type="text" name="ortak_tc_${i}" id="tc_${i}" maxlength="11" placeholder="T.C. Kimlik No" class="form-control mb-2">
+          <input type="text" name="ortak_vergi_${i}" id="vergi_${i}" maxlength="10" placeholder="Vergi Kimlik No" class="form-control mb-2 d-none">
+          <input type="number" name="ortak_sermaye_${i}" id="sermaye_${i}" placeholder="Sermaye (TL)" class="form-control mb-2" required oninput="hesapla(${i})">
+          <input type="number" name="ortak_pay_${i}" id="pay_${i}" placeholder="Pay Adedi" class="form-control mb-2" required oninput="hesapla(${i})">
+          <div>Pay Tutarı: <span id="pay_tutari_${i}">-</span></div>
+          <select name="ortak_uyruk_${i}" class="form-select my-2">
+            <option value="TÜRKİYE">TÜRKİYE</option>
+            <option value="ALMANYA">ALMANYA</option>
+            <option value="ABD">ABD</option>
+            <option value="FRANSA">FRANSA</option>
+            <option value="DİĞER">DİĞER</option>
+          </select>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="ortak_mudur_${i}" id="mudur_${i}">
+            <label class="form-check-label" for="mudur_${i}">Müdür olarak atanacak mı?</label>
+          </div>
+          <label>İmza Yetkisi:</label>
+          <select name="ortak_imza_${i}" class="form-select">
+            <option value="münferiden">Münferiden</option>
+            <option value="müştereken">Müştereken</option>
+          </select>
+        </div>
+      </div>`;
+  }
+}
+
+function hesapla(i) {
+  const sermaye = parseFloat(document.getElementById(`sermaye_${i}`).value) || 0;
+  const pay = parseInt(document.getElementById(`pay_${i}`).value) || 0;
+  const sonuc = document.getElementById(`pay_tutari_${i}`);
+  sonuc.innerText = (pay > 0) ? (sermaye / pay).toFixed(2) + " TL" : "-";
+}
+
+function toggleKimlikVeEtiket(i, tip) {
+  document.getElementById(`tc_${i}`).classList.toggle("d-none", tip !== "gercek");
+  document.getElementById(`vergi_${i}`).classList.toggle("d-none", tip !== "tuzel");
+  document.getElementById(`etiket_adsoyad_${i}`).innerText = tip === "tuzel" ? "Unvan" : "Ad Soyad";
+  document.querySelector(`[name=ortak_ad_${i}]`).placeholder = tip === "tuzel" ? "Unvan" : "Ad Soyad";
+}
+
+</script>
+</body>
+</html>
